@@ -3,12 +3,10 @@
 # !pip install -U git+https://github.com/huggingface/trl
 import json
 import sys
-
 import pandas as pd
 from trl import DPOConfig, DPOTrainer
 import torch
 from unsloth import FastLanguageModel
-
 from datasets import Dataset, load_dataset
 from tqdm import tqdm
 import random
@@ -103,9 +101,6 @@ def qlora_training(model_name, nb_examples, seed, hf_token, dataset, epochs):
     dpo_trainer.train()
     return dpo_trainer.model, tokenizer
 
-
-
-
 def evaluate_model(model, tokenizer, dataset, model_name, align_to_moral, dataset_name, seed, output_path=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
@@ -177,8 +172,6 @@ def evaluate_model(model, tokenizer, dataset, model_name, align_to_moral, datase
     os.makedirs(os.path.dirname(result_path) or '.', exist_ok=True)
     with open(result_path, 'w', encoding='utf-8') as handle:
         json.dump(result, handle, ensure_ascii=False, indent=2)
-
-
 
 if __name__ == '__main__':
 

@@ -117,9 +117,6 @@ def compute_perplexity(model_name, model, tokenizer, dataset, device, dataset_na
         json.dump(result, file, ensure_ascii=False, indent=4)
     print(f"Results saved to: {result_file}")
 
-
-
-
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Argument parser for training script.')

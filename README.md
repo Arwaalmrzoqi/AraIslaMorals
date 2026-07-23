@@ -1,6 +1,6 @@
-## AraIslaMorals framework
+## AraIslaMorals Framework
 
-This project assesses the alignment of Large Language Models (LLMs) with Arabic-Islamic morals using the AraIslaMorals dataset. It assesses the preference of LLMs for moral versus immoral activities with three complementary approaches.
+This project assesses the alignment of Large Language Models (LLMs) with Arabic-Islamic moral values through the AraIslaMorals dataset. It specifically assesses the preference of LLMs towards moral versus immoral behaviors with three complementary approaches.
 
 ### Dataset
 
@@ -23,7 +23,7 @@ A CSV file comprising Arabic-Islamic moral narratives where each instance is ass
 **Purpose:** This approach assesses the _“implicit_” preferences of a model by measuring its degree of perplexity in reaction to moral vs. immoral actions.
 
 **Process:**
-1. For each narrative, a prompt is constructed by concatenating the _norms_ (_base norm_ and/or _descriptive norm_) + _situation_ + _intention_.
+1. For each story, a prompt is constructed by concatenating the _norms_ (_base norm_ and/or _descriptive norm_) + _situation_ + _intention_.
 2. The moral action is set as the _“chosen”_ continuation, whereas the immoral action is the _“rejected”_ continuation.
 3. The cross-entropy loss (perplexity) is calculated for both moral and immoral actions.
    - The prompt tokens are masked, so they do not influence the loss calculation.
@@ -37,7 +37,7 @@ A JSON list that consists of `count_moral`, `count_immoral`, `avg_ppl_moral`, `s
 ---
 
 #### 2. Declarative Prompting (`declarative_prompting_script.py`)
-**Purpose:** This method _“explicitly”_ asks the model to select between a moral and immoral action. It evaluates the model's _“explicit”_ moral reasoning when given a clear choice.
+**Purpose:** This method explicitly asks the model to select between a moral and immoral action. It evaluates the model's _“explicit”_ moral reasoning when given a clear choice.
 
 **Process:**
 1. A prompt is constructed containing the _norms_ (_base norm_ and/or _descriptive norm_), _situation_, and _intention_ with two options: option 1 (moral action) and option 2 (immoral action).
@@ -58,15 +58,15 @@ A JSON list that consists of `count_moral`, `count_immoral`, `avg_ppl_moral`, `s
 
 **Process:**
 1. The dataset is divided into training and testing sets using a 70/30 ratio, and the split ratio can be modified with `--test_size` parameter.
-2. A prompt is constructed similarly to the perplexity approach by combining a _base norm_, _situational context_, and _intention_.
-3. A boolean flag `--align_to_moral`, set to either true or false, directs the preference of a model towards a particular action based on its value, as follows:  
+2. A prompt is constructed similarly to the perplexity-based approach by combining the _base norm + situation + intention_.
+3. A boolean parameter `--align_to_moral` influences the preference of a model towards a particular action based on its value:
    - If `--align_to_moral` is set to `True`, align the model with moral values, defining moral behaviors as _“chosen”_ and immoral actions as _“rejected”._  
    - If `--align_to_moral` is set to `False`, the model deviates the model from moral principles, marking moral actions as _“rejected”_ and immoral actions as _"chosen"_.
 4. The model is set up with 4-bit quantization using QLoRA (via Unsloth), integrating LoRA adapters on the attention and MLP layers (r = 32, lora_alpha = 16).
 5. The DPO optimizes the model to maximize the probability difference between _chosen_ and _rejected_ completions, using a reference-free approach (beta = 0.1).
-6. The aligned model is evaluated on the test set through a perplexity comparison as demonstrated in `ppl_script.py`.
+6. The morally aligned model is evaluated on the test set through a perplexity comparison as demonstrated in the perplexity-based approach
 
-**Output:** A JSON object providing similar perplexity statistics as `ppl_script.py`, evaluated on a test set following the DPO fine-tuning.
+**Output:** A JSON object providing comparable perplexity statistics as `ppl_script.py`, evaluated on the test set following the DPO fine-tuning.
 
 ---
 
